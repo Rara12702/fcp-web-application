@@ -2,6 +2,7 @@ package main
 
 import (
 	"a21hc3NpZ25tZW50/client"
+	cfg "a21hc3NpZ25tZW50/config"
 	"a21hc3NpZ25tZW50/db"
 	"a21hc3NpZ25tZW50/handler/api"
 	"a21hc3NpZ25tZW50/handler/web"
@@ -44,6 +45,7 @@ func main() {
 	gin.SetMode(gin.ReleaseMode) //release
 
 	wg := sync.WaitGroup{}
+	cfg.Init()
 
 	wg.Add(1)
 	go func() {
@@ -62,12 +64,11 @@ func main() {
 		router.Use(gin.Recovery())
 
 		dbCredential := model.Credential{
-			Host:         "localhost",
-			Username:     "postgres",
-			Password:     "postgres",
-			DatabaseName: "asgmn2",
-			Port:         5432,
-			Schema:       "public",
+			Host:         cfg.Config.DBHost,
+			Username:     cfg.Config.DBUsername,
+			Password:     cfg.Config.DBPassword,
+			DatabaseName: cfg.Config.DBName,
+			Port:         cfg.Config.DBPort,
 		}
 
 		conn, err := db.Connect(&dbCredential)
